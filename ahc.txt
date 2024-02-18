@@ -1,2 +1,59 @@
+1) Note: Make sure that you are using proper naming convention i.e. the names given should be helpful to understand the resources rather than being random and confusing.
+For eg: If you are deploying an EC2 Instance in the Web Subnet of Prod VPC so give it a name like Instance1-prod-web.
 
-hhhh
+Create Auto Scaling Group
+- Create three Autoscaling Groups named DevASG, OpsASG, and FinanceASG.
+- Ensure that instances launched by these groups have the tags(name and env) respective to the Autoscaling Group.
+IAM Users and Policies
+- Create four IAM Users: DevUser, OpsUser, FinanceUser, and EC2User.
+- Assign policies to restrict access based on Resources Tag:
+- DevUser can perform all actions on instances launched in DevASG env.
+- OpsUser can perform all actions on instances launched in OpsASG env.
+- FinanceUser can perform all actions on instances launched in FinanceASG env.
+- EC2User can perform all actions on all instances but cannot use the EC2 Instance Connect option.
+- All of them are allowed to list all the instances.
+Console Access with EC2User
+- Log in to the console using EC2User in a new tab.
+- Terminate all resources.
+- Edit the user data of the launch template:
+- Mount EFS and deploy a web server(httpd).
+- Write "Hello from EC2 User" to index.html.
+- Make sure that any changes made in the web server should be visible to new as well as existing servers, wherever the launch template will be used.
+- Create a new Autoscaling Group (minimum 3 instances) named ProdASG using the launch template created.
+Configure Launch Template
+- Edit the user data of the launch template:
+- Add "Hello from $(hostname -f)" to index.html.
+- Make this version as default.
+Instance Management
+- Terminate two instances from the Autoscaling Group.
+- Verify that the changes made to the launch template are visible on existing and new instances.
+ScreenShots Required:
+Note: Make sure that your AWS Account alias/id and current system time are displayed in all the screenshots.
+Create Auto Scaling Group
+Tag Creation for all the 3.
+Once created show the screenshots of list of Instances of all three.
+IAM Users and Policies
+Users and their permissions.
+Login from each user and try stopping the one instance containing the same name and one instance containing a different name.
+From EC2User try connecting to one of the instances and share the error you got.
+Console Access with EC2User
+Instance Termination.
+User data.
+Public IP and Instance Id of all 3 instances.
+Copy and paste any server public ip on browser and show output.
+Instance Management
+Apart from the previous step server the other new 2 servers IP and output.
+Modified user data.
+Type Answer
+1
+2) Your organization is aiming at automating the Infrastructure creation and the deployment procedure. You are tasked with setting up and configuring the AWS environment to meet specific requirements.
+Tasks
+The points from 1-2 are supposed to be done using a Terraform script.
+1. The script is supposed to create a VPC and a Subnet inside that particular VPC.
+2. Make sure that you create a security group for all the Instances that you will need to create. You need to create a total of 3 Instances with elastic IP for all of the Instances, use the same security group for all the Instances. The security group is supposed to enable ports 22, 80, 8080 for Inbound rules and enable All Traffic, i.e all ports for Outbound rules.
+Install Ansible on one of these machines and Jenkins on the same machine manually.
+Set Ansible up and use the public ip (Elastic IP) in the default inventory file, i.e. /etc/ansible/hosts.
+Create a GitHub repository containing the Ansible script that will be run on the Slave machines.
+The Script is supposed to install Apache2 on one machine and nginx on the other machine.
+You will then need to set up the Jenkins Dashboard and the Jenkins Agents for the other 2 Instances that will be created using Terraform.
+The Ansible script that will be available in the GitHub repository needs to be run via a Jenkins Job. A webhook also needs to be created for the same so that the Job can be triggered anytime a push is made to the GitHub repository
